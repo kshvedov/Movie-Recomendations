@@ -1,8 +1,10 @@
+#made for windows
 import re
 import numpy as np
 from csv import reader
 from scipy import spatial as sp
 import time
+import codecs
 
 lines = []
 movies = {}
@@ -10,9 +12,7 @@ useRate = []
 numbUsers = 0
 numbFilms = 0
 simScores = {}
-simScoresM = []
-movieRatingsM = []
-movieNormM = []
+
 
 #Hash Optimized
 movieNames = {}
@@ -27,7 +27,7 @@ recommendedMovies = {}
 #reads all lines from user file and creates a 2D array
 def countUsers(fName):
     global numbUsers
-    oFile = open(fName, encoding="utf8")
+    oFile = codecs.open(fName, 'r', encoding="utf8")
     i = 0
     for line in reader(oFile):
         useRate.append(line)
