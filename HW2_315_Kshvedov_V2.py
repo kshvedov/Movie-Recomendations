@@ -1,4 +1,4 @@
-#made for windows
+#made for windows but runs from sh on linux
 import re
 import numpy as np
 from csv import reader
@@ -27,20 +27,20 @@ recommendedMovies = {}
 #reads all lines from user file and creates a 2D array
 def countUsers(fName):
     global numbUsers
-    oFile = codecs.open(fName, 'r', encoding="utf8")
+    oFile = open(fName)
     i = 0
-    for line in reader(oFile):
+    for line in reader(oFile): #reads line by line from file
         useRate.append(line)
         numbUsers = useRate[i][0]
         i += 1
-    print("Users: ", numbUsers)
+    print("Users: ", numbUsers) #number of users total
     oFile.close()
 
 #Reads all movies from file and places in a 2D array
 def readMovies(fName):
-    oFile = open(fName, encoding="utf8")
+    oFile = open(fName)
     i = 0
-    for line in reader(oFile):
+    for line in reader(oFile): #reads line by line from file
         lines.append(line)
     print("Finished reading Movie File!")
     oFile.close()
@@ -53,10 +53,8 @@ def movieLib():
         tempDict = {}
         for each in tGenr:
             tempDict[each] = 1
-        ratings = []
-        for i in range(int(numbUsers)):
-            ratings.append(0)
-        #Hash
+        ratings = np.zeros(int(numbUsers))
+        #Hash that keeps information about each movie
         movies[movie[0]] = [movie[1], tempDict, ratings, [], numbFilms]
 
         #Hash Optimized
@@ -80,12 +78,13 @@ def inputingRating():
     end = time.time()
     print("InputRating Hash Optimized in seconds: ",end - start)
 
-#normalizes all movie ratings that are not zeroes
+#normalizes all movie ratings that are not zeroes by subtrackting
+#mean of nonzeroes from each non zero value
 def normRating():
     #Hash Optimized
     start = time.time()
     for key in movieRatings.keys():
-        temp = np.array(movieRatings[key])
+        temp = movieRatings[key]
         if np.count_nonzero(movieRatings[key]) != 0:
             avr = temp[temp.nonzero()].mean()
         for j in range(0,int(numbUsers)):
@@ -134,6 +133,8 @@ def simulateScore():
     print("simulateScore Hash Optimized in seconds: ",endHO - startHO)
     print("Centered Similarity Scores Created!")
 
+#Estimates zero rating by taking top five movies for the movie attempting to rate and using
+#formula evaluate the score
 def estimateZeroRating():
     startHO = time.time()
     for key in movieNames.keys():
@@ -154,6 +155,7 @@ def estimateZeroRating():
     print("estimate Zero Ratings in seconds: ",endHO - startHO)
     print("All zero ratings Estimated!")
 
+#creates a list of all movie rating estimates and picks top five
 def topFiveMoviesUser(file):
     startHO = time.time()
     for i in range(int(numbUsers)):
@@ -194,9 +196,3 @@ if __name__ == '__main__':
     estimateZeroRating()
     topFiveMoviesUser(writeFile)
     writeFile.close()
-    #temp = np.linalg.norm([0,2,0,4,5])*np.linalg.norm([0,0,1,0,3])
-    #simScores[(key1,key2)]=np.dot(movieRatings[key1], movieRatings[key2])/temp
-    #temp1=np.dot([0,2,0,4,5],[0,0,1,0,3])
-    #temp2=temp1/temp
-    #temp3=1 - sp.distance.cosine([0,2,0,4,5],[0,0,1,0,3])
-    #print("(",temp1,")/",temp,"=",temp2," VS ", temp3)
