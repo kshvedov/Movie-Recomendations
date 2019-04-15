@@ -27,7 +27,7 @@ recommendedMovies = {}
 #reads all lines from user file and creates a 2D array
 def countUsers(fName):
     global numbUsers
-    oFile = codecs.open(fName, 'r', encoding="utf8")
+    oFile = open(fName)
     i = 0
     for line in reader(oFile): #reads line by line from file
         useRate.append(line)
@@ -38,7 +38,7 @@ def countUsers(fName):
 
 #Reads all movies from file and places in a 2D array
 def readMovies(fName):
-    oFile = codecs.open(fName, 'r', encoding="utf8")
+    oFile = open(fName)
     i = 0
     for line in reader(oFile): #reads line by line from file
         lines.append(line)
@@ -105,7 +105,7 @@ def simulateScore():
     startHO = time.time()
     for key1 in movieNames.keys():
         #if int(key1) <= 200:
-                start = time.time()
+                #start = time.time()
                 topSim = []
                 for key2 in movieNames.keys():
                     #if int(key2) <= 200:
@@ -127,8 +127,8 @@ def simulateScore():
                 for i in range(0,5):
                     movieNeighbor[key1].append(topSim[i])
                 #print(movieNeighbor[key1])
-                end = time.time()
-                print(key1, "- simulateScore Hash Optimized in seconds: ",end - start)
+                #end = time.time()
+                #print(key1, "- simulateScore Hash Optimized in seconds: ",end - start)
     endHO = time.time()
     print("simulateScore Hash Optimized in seconds: ",endHO - startHO)
     print("Centered Similarity Scores Created!")
